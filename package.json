@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -p 8899",
     "build": "next build",
-    "start": "next start -p 8899",
+    "start": "next start -p 8800",
     "lint": "next lint",
     "lint:fix": "eslint src --fix && pnpm format",
     "lint:strict": "eslint --max-warnings=0 src",
@@ -16,7 +16,7 @@
     "format:check": "prettier -c .",
     "postbuild": "next-sitemap --config next-sitemap.config.js",
     "prepare": "husky install",
-    "start:pm2": "pm2 start .ecosystem.config.js"
+    "start:pm2": "pm2 start ecosystem.config.js"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.55.4",
