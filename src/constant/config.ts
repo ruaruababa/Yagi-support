@@ -1,7 +1,6 @@
 export const siteConfig = {
-  title: 'Next.js + Tailwind CSS + TypeScript Starter',
+  title: 'Hỗ trợ vùng lụt',
   description:
-    'A starter for Next.js, Tailwind CSS, and TypeScript with Absolute Import, Seo, Link component, pre-configured with Husky',
-  /** Without additional '/' on the end, e.g. https://theodorusclarence.com */
-  url: 'https://tsnext-tw.thcl.dev',
+    'Hỗ trợ vùng lụt là một dự án nhỏ nhằm giúp đỡ những người bị ảnh hưởng bởi lũ lụt.',
+  url: 'https://yagi.dev',
 };

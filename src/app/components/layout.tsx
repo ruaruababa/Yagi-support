@@ -3,9 +3,12 @@ import * as React from 'react';
 
 import '@/styles/colors.css';
 
+import ReactQueryProvider from '../react-query-provider';
+
 export const metadata: Metadata = {
-  title: 'Components',
-  description: 'Pre-built components with awesome default',
+  title: 'Hỗ trợ vùng lụt',
+  description:
+    'Hỗ trợ vùng lụt là một dự án nhỏ nhằm giúp đỡ những người bị ảnh hưởng bởi lũ lụt.',
 };
 
 export default function ComponentsLayout({
@@ -13,5 +16,9 @@ export default function ComponentsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      <ReactQueryProvider>{children}</ReactQueryProvider>
+    </>
+  );
 }

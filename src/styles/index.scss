@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import 'font.css';
+
+body {
+  margin: 0;
+  background: #f5f5f5;
+}
+
+.cs-container {
+  @media screen and (min-width: 320px) {
+    padding: 16px 16px;
+  }
+
+  @media screen and (min-width: 768px) {
+    padding: 16px 30px;
+  }
+}
+
+.skeleton {
+  display: inline-block;
+  background: linear-gradient(80deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.blue-background {
+  background: var(--gradient-2);
+}
+
+@keyframes connecting {
+  0% {
+    box-shadow: 0 0 0 0 rgba(159, 235, 87, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 20px rgba(235, 87, 87, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(235, 87, 87, 0);
+  }
+}
+
+.connecting {
+  display: block;
+  width: 15px !important;
+  height: 15px !important;
+  border-radius: 50% !important;
+  background: #009f50 !important;
+  animation: connecting 2s infinite;
+}
+
+.disconnected {
+  display: block;
+  width: 15px !important;
+  height: 15px !important;
+  border-radius: 50% !important;
+  background: #eb5757 !important;
+}
+
+.ring_ring {
+  animation: bounce 1s alternate;
+  border: 1px solid red;
+}
+
+@keyframes bounce {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.1;
+  }
+}
+
+.text-blink {
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 50;
+  }
+}
+
+.font-inter {
+  font-family: 'Inter', sans-serif !important;
+}
