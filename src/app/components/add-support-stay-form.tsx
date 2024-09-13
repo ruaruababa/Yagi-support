@@ -4,7 +4,13 @@ import TextArea from 'antd/es/input/TextArea';
 import { CreateForm } from './add-need-support-form';
 import LocationInput from './location-input';
 
-const AddSupportStayForm = ({ form, onSubmit }: CreateForm) => {
+const AddSupportStayForm = ({
+  form,
+  onSubmit,
+  districts,
+  provinces,
+  wards,
+}: CreateForm) => {
   return (
     <div>
       <Form layout="vertical" className="mt-4" form={form} onFinish={onSubmit}>
@@ -34,7 +40,11 @@ const AddSupportStayForm = ({ form, onSubmit }: CreateForm) => {
             <Input size="small" />
           </Form.Item>
         </div>
-        <LocationInput />
+        <LocationInput
+          districts={districts}
+          provinces={provinces}
+          wards={wards}
+        />
 
         <Form.Item name="description" label="Mô tả">
           <TextArea

@@ -2,17 +2,15 @@
 
 import '@/lib/env';
 import { Tag } from 'antd';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
-import { Suspense, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import UnderlineLink from '@/components/links/UnderlineLink';
+import Skeleton from '@/components/Skeleton';
 
 import useSupportYagi from './hooks/useSupportYagi';
 import { tags } from './services/types';
-
-import Skeleton from '@/components/Skeleton';
-import dynamic from 'next/dynamic';
-import LoadingPage from './loading';
 
 // Sử dụng dynamic import cho các component mà bạn muốn tải động
 const ListNeedSupport = dynamic(
@@ -100,37 +98,111 @@ export default function HomePage() {
     cans,
     govs,
     stays,
+    paginationCan,
+    paginationGov,
+    paginationNeed,
+    paginationStay,
   } = useSupportYagi();
 
   const renderTabContent = useMemo(() => {
     switch (activeTab.key) {
       case 'list-need-support':
         return (
-          <Suspense fallback={<LoadingPage />}>
-            <ListNeedSupport
-              data={needs}
-              handleUpdateNeedStatus={handleUpdateNeedStatus}
-            />{' '}
-          </Suspense>
+          <ListNeedSupport
+            key={activeTab.key}
+            data={needs}
+            handleUpdateNeedStatus={handleUpdateNeedStatus}
+            pagination={paginationNeed}
+          />
         );
       case 'add-support-info':
-        return <NeedSupportForm form={form} onSubmit={onSubmit} />;
+        return (
+          <NeedSupportForm
+            districts={districts}
+            provinces={provinces}
+            wards={wards}
+            key={activeTab.key}
+            form={form}
+            onSubmit={onSubmit}
+          />
+        );
       case 'list-support-teams':
-        return <ListCanSupport data={cans} />;
+        return (
+          <ListCanSupport
+            data={cans}
+            pagination={paginationCan}
+            key={activeTab.key}
+          />
+        );
       case 'add-support-teams-info':
-        return <CanSupportForm form={form} onSubmit={onSubmit} />;
+        return (
+          <CanSupportForm
+            key={activeTab.key}
+            form={form}
+            onSubmit={onSubmit}
+            districts={districts}
+            provinces={provinces}
+            wards={wards}
+          />
+        );
       case 'list-accommodations':
-        return <ListSupportStay data={stays} />;
+        return (
+          <ListSupportStay
+            key={activeTab.key}
+            data={stays}
+            pagination={paginationStay}
+          />
+        );
       case 'add-accommodations-info':
-        return <SupportStayForm form={form} onSubmit={onSubmit} />;
+        return (
+          <SupportStayForm
+            key={activeTab.key}
+            form={form}
+            onSubmit={onSubmit}
+            districts={districts}
+            provinces={provinces}
+            wards={wards}
+          />
+        );
       case 'connect-authorities':
-        return <ConnectGovPage data={govs} />;
+        return (
+          <ConnectGovPage
+            key={activeTab.key}
+            data={govs}
+            pagination={paginationGov}
+          />
+        );
       case 'add-connect-authorities':
-        return <AddConnectGovForm form={form} onSubmit={onSubmit} />;
+        return (
+          <AddConnectGovForm
+            key={activeTab.key}
+            form={form}
+            onSubmit={onSubmit}
+            districts={districts}
+            provinces={provinces}
+            wards={wards}
+          />
+        );
       default:
         return;
     }
-  }, [activeTab, needs, cans, govs, stays, form, onSubmit]);
+  }, [
+    activeTab.key,
+    needs,
+    handleUpdateNeedStatus,
+    paginationNeed,
+    form,
+    onSubmit,
+    cans,
+    paginationCan,
+    stays,
+    paginationStay,
+    govs,
+    paginationGov,
+    districts,
+    provinces,
+    wards,
+  ]);
 
   return (
     <main>
@@ -157,16 +229,14 @@ export default function HomePage() {
 
           <div className="mt-4">
             {!activeTab.hiddenFilter ? (
-              <Suspense fallback={<LoadingPage />}>
-                <Filter
-                  provinces={provinces}
-                  districts={districts}
-                  wards={wards}
-                  onChangeProvince={handleProvinceChange}
-                  onChangeDistrict={handleDistrictChange}
-                  onChangeWard={handleWardChange}
-                />
-              </Suspense>
+              <Filter
+                provinces={provinces}
+                districts={districts}
+                wards={wards}
+                onChangeProvince={handleProvinceChange}
+                onChangeDistrict={handleDistrictChange}
+                onChangeWard={handleWardChange}
+              />
             ) : null}
           </div>
 

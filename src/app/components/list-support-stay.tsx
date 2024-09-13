@@ -1,9 +1,10 @@
-import { Table, TableColumnsType, Tag } from 'antd';
+import { Table, TableColumnsType, TablePaginationConfig, Tag } from 'antd';
 
 import { NeedSupport } from '../services/types';
 
 interface Props {
   data: NeedSupport[] | undefined;
+  pagination: TablePaginationConfig;
 }
 
 const ListSupportStay = (props: Props) => {
@@ -42,19 +43,6 @@ const ListSupportStay = (props: Props) => {
         );
       },
     },
-    // {
-    //   title: 'Trạng thái',
-    //   dataIndex: 'status',
-    //   key: 'status',
-    //   align: 'center',
-    //   render: (status: boolean) => {
-    //     return (
-    //       <div className="flex items-center justify-center">
-    //         <Checkbox defaultChecked={status} />
-    //       </div>
-    //     );
-    //   },
-    // },
   ];
 
   return (
@@ -66,6 +54,7 @@ const ListSupportStay = (props: Props) => {
           }}
           dataSource={data}
           columns={columns}
+          pagination={false}
         />
       </div>
     </div>

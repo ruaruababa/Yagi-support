@@ -1,10 +1,17 @@
-import { Button, Form, Select } from 'antd';
+import { Button, Form } from 'antd';
 import Input from 'antd/es/input/Input';
 import TextArea from 'antd/es/input/TextArea';
 
 import { CreateForm } from './add-need-support-form';
+import LocationInput from './location-input';
 
-const CanSupportForm = ({ form, onSubmit }: CreateForm) => {
+const CanSupportForm = ({
+  form,
+  onSubmit,
+  districts,
+  provinces,
+  wards,
+}: CreateForm) => {
   return (
     <div>
       <Form layout="vertical" className="mt-4" form={form} onFinish={onSubmit}>
@@ -35,48 +42,12 @@ const CanSupportForm = ({ form, onSubmit }: CreateForm) => {
           </Form.Item>
         </div>
 
-        <div className="grid grid-cols-3 gap-2">
-          <Form.Item
-            name="province"
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng chọn Tỉnh/Thành phố',
-              },
-            ]}
-          >
-            <Select
-              size="large"
-              placeholder="Tỉnh/Thành phố"
-              allowClear
-              showSearch
-            />
-          </Form.Item>
-          <Form.Item
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng chọn Quận/Huyện/Thị xã',
-              },
-            ]}
-            name="district"
-          >
-            <Select
-              size="large"
-              placeholder="Quận/Huyện/Thị xã"
-              allowClear
-              showSearch
-            />
-          </Form.Item>
-          <Form.Item name="ward">
-            <Select
-              size="large"
-              placeholder="Phường/Xã"
-              allowClear
-              showSearch
-            />
-          </Form.Item>
-        </div>
+        <LocationInput
+          districts={districts}
+          provinces={provinces}
+          wards={wards}
+        />
+
         <Form.Item label="Mô tả về đoàn" name="description">
           <TextArea rows={6} placeholder="Thời gian dự kiến, số lượng ..." />
         </Form.Item>

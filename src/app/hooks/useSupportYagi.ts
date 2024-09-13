@@ -1,12 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Form, notification } from 'antd';
+import { Form, notification, TablePaginationConfig } from 'antd';
 import { useWatch } from 'antd/es/form/Form';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { CACHE_LOCATION_TIME, DEFAULT_PROVINCE } from '@/constant/const';
 
-import { createConnectGov, getConnectGov } from './../services/connect-gov';
-import useDebounce from './useDebounce';
 import { createCanSupport, getCans } from '../services/can-support';
 import { getDistricts, GetDistrictsQueries } from '../services/district';
 import {
@@ -19,6 +17,8 @@ import { getProvinces } from '../services/province';
 import { createStaySupport, getStaySupport } from '../services/stay-support';
 import { tags, TagType } from '../services/types';
 import { getWards, GetWardsQueries } from '../services/ward';
+import { createConnectGov, getConnectGov } from './../services/connect-gov';
+import useDebounce from './useDebounce';
 
 const useSupportYagi = () => {
   const [form] = Form.useForm();
@@ -27,6 +27,12 @@ const useSupportYagi = () => {
   const ward = useWatch('ward', form);
   const [activeTab, setActiveTab] = useState<TagType>(tags[2]);
   const queryClient = useQueryClient();
+
+  const defaultQueries = {
+    province: DEFAULT_PROVINCE,
+    limit: 100,
+    page: 1,
+  };
 
   const [districtQueries, setDistrictQueries] = useState<GetDistrictsQueries>({
     province_code: DEFAULT_PROVINCE,
@@ -38,22 +44,17 @@ const useSupportYagi = () => {
     page: 1,
   });
 
-  const [neeedQueries, setNeedQueries] = useState<NeedSupportQueries>({
-    province: DEFAULT_PROVINCE,
-  });
+  const [neeedQueries, setNeedQueries] =
+    useState<NeedSupportQueries>(defaultQueries);
 
-  const [canQueries, setCanQueries] = useState<NeedSupportQueries>({
-    province: DEFAULT_PROVINCE,
-  });
+  const [canQueries, setCanQueries] =
+    useState<NeedSupportQueries>(defaultQueries);
 
-  const [stayQueries, setStayQueries] = useState<NeedSupportQueries>({
-    province: DEFAULT_PROVINCE,
-  });
+  const [stayQueries, setStayQueries] =
+    useState<NeedSupportQueries>(defaultQueries);
 
-  const [govQueries, setGovQueries] = useState<NeedSupportQueries>({
-    province: DEFAULT_PROVINCE,
-    status: false,
-  });
+  const [govQueries, setGovQueries] =
+    useState<NeedSupportQueries>(defaultQueries);
 
   const getWardQueries = useDebounce(wardQueries, 300);
   const getDistrictQueries = useDebounce(districtQueries, 300);
@@ -61,6 +62,17 @@ const useSupportYagi = () => {
   const getCansQueries = useDebounce(canQueries, 300);
   const getStaySupportQueries = useDebounce(stayQueries, 300);
   const getConnectGovQueris = useDebounce(govQueries, 300);
+
+  useEffect(() => {
+    if (province) {
+      setDistrictQueries((pre) => ({ ...pre, province_code: province }));
+      setWardQueries((pre) => ({ ...pre, province_code: province }));
+    }
+
+    if (district) {
+      setWardQueries((pre) => ({ ...pre, district_code: district }));
+    }
+  }, [province, district]);
 
   const handleTabSwitch = (tab: TagType) => {
     setActiveTab(tab);
@@ -81,10 +93,9 @@ const useSupportYagi = () => {
   }, [provinceData]);
 
   const { data: districtData } = useQuery({
-    queryKey: ['districts', getDistrictQueries],
+    queryKey: ['districts', getDistrictQueries, province],
     queryFn: () => getDistricts(getDistrictQueries),
-    enabled: !!getDistrictQueries.province_code || !!province,
-    staleTime: CACHE_LOCATION_TIME,
+    enabled: !!province || !!getDistrictQueries.province_code,
   });
 
   const districts = useMemo(() => {
@@ -194,20 +205,75 @@ const useSupportYagi = () => {
     return needData.results;
   }, [needData]);
 
+  const paginationNeed: TablePaginationConfig = useMemo(() => {
+    return {};
+  }, [needData]);
+
   const cans = useMemo(() => {
     if (!canData) return [];
     return canData.results;
   }, [canData]);
+
+  const paginationCan: TablePaginationConfig = useMemo(() => {
+    if (activeTab.key === 'list-support-teams') {
+      const totalCount = canData?.totalResults;
+      return {
+        total: totalCount,
+        current: canQueries.page,
+        pageSize: 10,
+        onChange: (page) => {
+          setCanQueries((pre) => ({ ...pre, page }));
+        },
+        showSizeChanger: false,
+        size: 'small',
+      };
+    }
+    return {};
+  }, [canData, canQueries, setCanQueries, activeTab.key]);
 
   const stays = useMemo(() => {
     if (!stayData) return [];
     return stayData.results;
   }, [stayData]);
 
+  const paginationStay: TablePaginationConfig = useMemo(() => {
+    if (activeTab.key === 'list-accommodations') {
+      const totalCount = stayData?.totalResults;
+      return {
+        total: totalCount,
+        current: stayQueries.page,
+        onChange: (page) => {
+          setStayQueries((pre) => ({ ...pre, page }));
+        },
+        pageSize: 10,
+        showSizeChanger: false,
+        size: 'small',
+      };
+    }
+    return {};
+  }, [stayData, stayQueries, setStayQueries, activeTab.key]);
+
   const govs = useMemo(() => {
     if (!govData) return [];
     return govData.results;
   }, [govData]);
+
+  const paginationGov: TablePaginationConfig = useMemo(() => {
+    if (activeTab.key === 'connect-authorities') {
+      const totalCount = govData?.totalResults;
+      return {
+        total: totalCount,
+        current: govQueries.page,
+        onChange: (page) => {
+          setGovQueries((pre) => ({ ...pre, page }));
+        },
+        pageSize: 10,
+        showSizeChanger: false,
+        size: 'small',
+      };
+    }
+    return {};
+  }, [govData, govQueries, setGovQueries]);
 
   const { mutate: createNeedMutate } = useMutation({
     mutationFn: createNeedSupport,
@@ -299,6 +365,7 @@ const useSupportYagi = () => {
       }
     },
     [
+      activeTab.key,
       createNeedMutate,
       createCanMutate,
       createStaySupportMutate,
@@ -306,9 +373,12 @@ const useSupportYagi = () => {
     ],
   );
 
-  const handleUpdateNeedStatus = useCallback((id: string, status: boolean) => {
-    updateNeedStatusMutate({ id, status });
-  }, []);
+  const handleUpdateNeedStatus = useCallback(
+    (id: string, status: boolean) => {
+      updateNeedStatusMutate({ id, status });
+    },
+    [updateNeedStatusMutate],
+  );
 
   return {
     provinces,
@@ -326,6 +396,10 @@ const useSupportYagi = () => {
     cans,
     stays,
     govs,
+    paginationCan,
+    paginationNeed,
+    paginationStay,
+    paginationGov,
   };
 };
 

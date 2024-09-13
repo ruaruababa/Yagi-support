@@ -1,15 +1,21 @@
-import { Checkbox, Table, TableColumnsType, Tag } from 'antd';
+import {
+  Checkbox,
+  Table,
+  TableColumnsType,
+  TablePaginationConfig,
+  Tag,
+} from 'antd';
 
 import { NeedSupport } from '../services/types';
 
 interface Props {
   data: NeedSupport[] | undefined;
   handleUpdateNeedStatus: (id: string, status: boolean) => void;
+  pagination: TablePaginationConfig;
 }
 
 const ListNeedSupport = (props: Props) => {
   const { data, handleUpdateNeedStatus } = props;
-  console.log(data);
 
   const columns: TableColumnsType<NeedSupport> = [
     {
@@ -74,6 +80,7 @@ const ListNeedSupport = (props: Props) => {
           }}
           dataSource={data}
           columns={columns}
+          pagination={false}
         />
       </div>
     </div>

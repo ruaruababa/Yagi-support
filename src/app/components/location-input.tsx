@@ -3,10 +3,7 @@ import { Form, Select } from 'antd';
 import { DEFAULT_PROVINCE } from '@/constant/const';
 import { filterOption } from '@/helpers/filter';
 
-import useSupportYagi from '../hooks/useSupportYagi';
-
-const LocationInput = () => {
-  const { districts, provinces, wards } = useSupportYagi();
+const LocationInput = ({ districts, provinces, wards }: any) => {
   return (
     <div className="grid grid-cols-3 gap-2">
       <Form.Item
@@ -27,7 +24,6 @@ const LocationInput = () => {
           options={provinces}
           fieldNames={{ label: 'name', value: 'code' }}
           filterOption={filterOption}
-          defaultValue={DEFAULT_PROVINCE}
           dropdownStyle={{
             //if mobile
             width: '100%',

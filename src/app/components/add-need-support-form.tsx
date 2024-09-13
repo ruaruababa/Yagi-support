@@ -2,14 +2,24 @@ import { Button, Form } from 'antd';
 import Input from 'antd/es/input/Input';
 import TextArea from 'antd/es/input/TextArea';
 
+import { District, Province, Ward } from '../services/types';
 import LocationInput from './location-input';
 
 export interface CreateForm {
   form: any;
   onSubmit: (values: any) => void;
+  districts: District[];
+  provinces: Province[];
+  wards: Ward[];
 }
 
-const NeedSupportForm = ({ form, onSubmit }: CreateForm) => {
+const NeedSupportForm = ({
+  form,
+  onSubmit,
+  districts,
+  provinces,
+  wards,
+}: CreateForm) => {
   return (
     <div>
       <Form layout="vertical" className="mt-4" form={form} onFinish={onSubmit}>
@@ -39,7 +49,11 @@ const NeedSupportForm = ({ form, onSubmit }: CreateForm) => {
             <Input size="small" />
           </Form.Item>
         </div>
-        <LocationInput />
+        <LocationInput
+          districts={districts}
+          provinces={provinces}
+          wards={wards}
+        />
         <Form.Item label="Mô tả thêm" name="description">
           <TextArea
             rows={6}

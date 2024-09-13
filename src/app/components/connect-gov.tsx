@@ -1,9 +1,10 @@
-import { Table, TableColumnsType, Tag } from 'antd';
+import { Table, TableColumnsType, TablePaginationConfig, Tag } from 'antd';
 
 import { NeedSupport } from '../services/types';
 
 interface Props {
   data: NeedSupport[] | undefined;
+  pagination: TablePaginationConfig;
 }
 
 const ListConnectGov = (props: Props) => {
@@ -66,6 +67,7 @@ const ListConnectGov = (props: Props) => {
           }}
           dataSource={data}
           columns={columns}
+          pagination={false}
         />
       </div>
     </div>
