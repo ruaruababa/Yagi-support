@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import * as React from 'react';
 
-import '@/styles/colors.css';
+import '@/styles/colors.scss';
 
 import ReactQueryProvider from '../react-query-provider';
 

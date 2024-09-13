@@ -10,6 +10,7 @@ const LocationInput = () => {
   return (
     <div className="grid grid-cols-3 gap-2">
       <Form.Item
+        initialValue={DEFAULT_PROVINCE}
         name="province"
         rules={[
           {
@@ -27,6 +28,10 @@ const LocationInput = () => {
           fieldNames={{ label: 'name', value: 'code' }}
           filterOption={filterOption}
           defaultValue={DEFAULT_PROVINCE}
+          dropdownStyle={{
+            //if mobile
+            width: '100%',
+          }}
         />
       </Form.Item>
       <Form.Item
@@ -47,6 +52,10 @@ const LocationInput = () => {
           placement="bottomRight"
           filterOption={filterOption}
           fieldNames={{ label: 'name', value: 'code' }}
+          dropdownStyle={{
+            //if mobile
+            width: '100%',
+          }}
         />
       </Form.Item>
       <Form.Item name="ward">
@@ -59,6 +68,10 @@ const LocationInput = () => {
           placement="bottomLeft"
           filterOption={filterOption}
           fieldNames={{ label: 'name', value: 'code' }}
+          dropdownStyle={{
+            //if mobile
+            width: '50%',
+          }}
         />
       </Form.Item>
     </div>

@@ -1,24 +1,76 @@
 'use client';
 
+import '@/lib/env';
 import { Tag } from 'antd';
 import Head from 'next/head';
-import { useMemo } from 'react';
-import '@/lib/env';
+import { Suspense, useMemo } from 'react';
 
 import UnderlineLink from '@/components/links/UnderlineLink';
 
-import ListNeedSupport from '@/app/components/list-need-support';
-
-import CanSupportForm from './components/add-can-support-form';
-import AddConnectGovForm from './components/add-connect-gov-from';
-import NeedSupportForm from './components/add-need-support-form';
-import SupportStayForm from './components/add-support-stay-form';
-import ConnectGovPage from './components/connect-gov';
-import Filter from './components/filter';
-import ListCanSupport from './components/list-can-support';
-import ListSupportStay from './components/list-support-stay';
 import useSupportYagi from './hooks/useSupportYagi';
 import { tags } from './services/types';
+
+import Skeleton from '@/components/Skeleton';
+import dynamic from 'next/dynamic';
+import LoadingPage from './loading';
+
+// Sử dụng dynamic import cho các component mà bạn muốn tải động
+const ListNeedSupport = dynamic(
+  () => import('@/app/components/list-need-support'),
+  {
+    suspense: true,
+    loading: () => <Skeleton />,
+  },
+);
+
+const ListCanSupport = dynamic(() => import('./components/list-can-support'), {
+  suspense: true,
+  loading: () => <Skeleton />,
+});
+
+const ListSupportStay = dynamic(
+  () => import('./components/list-support-stay'),
+  {
+    suspense: true,
+  },
+);
+
+const ConnectGovPage = dynamic(() => import('./components/connect-gov'), {
+  suspense: true,
+});
+
+const AddConnectGovForm = dynamic(
+  () => import('./components/add-connect-gov-from'),
+  {
+    suspense: true,
+  },
+);
+
+const CanSupportForm = dynamic(
+  () => import('./components/add-can-support-form'),
+  {
+    suspense: true,
+  },
+);
+
+const NeedSupportForm = dynamic(
+  () => import('./components/add-need-support-form'),
+  {
+    suspense: true,
+  },
+);
+
+const SupportStayForm = dynamic(
+  () => import('./components/add-support-stay-form'),
+  {
+    suspense: true,
+  },
+);
+
+const Filter = dynamic(() => import('./components/filter'), {
+  suspense: true,
+});
+
 /**
  * SVGR Support
  * Caveat: No React Props Type.
@@ -54,10 +106,12 @@ export default function HomePage() {
     switch (activeTab.key) {
       case 'list-need-support':
         return (
-          <ListNeedSupport
-            data={needs}
-            handleUpdateNeedStatus={handleUpdateNeedStatus}
-          />
+          <Suspense fallback={<LoadingPage />}>
+            <ListNeedSupport
+              data={needs}
+              handleUpdateNeedStatus={handleUpdateNeedStatus}
+            />{' '}
+          </Suspense>
         );
       case 'add-support-info':
         return <NeedSupportForm form={form} onSubmit={onSubmit} />;
@@ -103,14 +157,16 @@ export default function HomePage() {
 
           <div className="mt-4">
             {!activeTab.hiddenFilter ? (
-              <Filter
-                provinces={provinces}
-                districts={districts}
-                wards={wards}
-                onChangeProvince={handleProvinceChange}
-                onChangeDistrict={handleDistrictChange}
-                onChangeWard={handleWardChange}
-              />
+              <Suspense fallback={<LoadingPage />}>
+                <Filter
+                  provinces={provinces}
+                  districts={districts}
+                  wards={wards}
+                  onChangeProvince={handleProvinceChange}
+                  onChangeDistrict={handleDistrictChange}
+                  onChangeWard={handleWardChange}
+                />
+              </Suspense>
             ) : null}
           </div>
 

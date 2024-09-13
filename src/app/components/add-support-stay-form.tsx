@@ -1,7 +1,8 @@
-import { Button, Form, Input, Select } from 'antd';
+import { Button, Form, Input } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 
 import { CreateForm } from './add-need-support-form';
+import LocationInput from './location-input';
 
 const AddSupportStayForm = ({ form, onSubmit }: CreateForm) => {
   return (
@@ -33,48 +34,7 @@ const AddSupportStayForm = ({ form, onSubmit }: CreateForm) => {
             <Input size="small" />
           </Form.Item>
         </div>
-        <div className="grid grid-cols-3 gap-2">
-          <Form.Item
-            name="province"
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng chọn Tỉnh/Thành phố',
-              },
-            ]}
-          >
-            <Select
-              size="large"
-              placeholder="Tỉnh/Thành phố"
-              allowClear
-              showSearch
-            />
-          </Form.Item>
-          <Form.Item
-            rules={[
-              {
-                required: true,
-                message: 'Vui lòng chọn Quận/Huyện/Thị xã',
-              },
-            ]}
-            name="district"
-          >
-            <Select
-              size="large"
-              placeholder="Quận/Huyện/Thị xã"
-              allowClear
-              showSearch
-            />
-          </Form.Item>
-          <Form.Item name="ward">
-            <Select
-              size="large"
-              placeholder="Phường/Xã"
-              allowClear
-              showSearch
-            />
-          </Form.Item>
-        </div>
+        <LocationInput />
 
         <Form.Item name="description" label="Mô tả">
           <TextArea
